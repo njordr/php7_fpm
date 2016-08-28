@@ -22,6 +22,10 @@ RUN apt-get update && apt-get install -y \
         geoip-bin \
         libgeoip-dev \
         libgeoip1 \
+        libfreetype6-dev \
+        libjpeg-turbo8-dev \
+        libmcrypt-dev \
+        libpng12-dev \
     --no-install-recommends && rm -r /var/lib/apt/lists/*
 
 ENV PHP_INI_DIR /usr/local/etc/php
@@ -43,15 +47,12 @@ RUN cd /usr/src \
     && ./configure \
         --with-config-file-path="$PHP_INI_DIR" \
         --with-config-file-scan-dir="$PHP_INI_DIR/conf.d" \
-        \
         --disable-cgi \
-        \
         --enable-ftp \
         --enable-mbstring \
         --enable-mysqlnd \
         --with-mysqli \
          --with-pdo-mysql \
-        \
         --with-curl \
         --with-libedit \
         --with-openssl \
@@ -60,6 +61,11 @@ RUN cd /usr/src \
         --with-fpm-user=www-data \
         --with-fpm-group=www-data \
         --with-curl \
+        --with-gd \
+        --with-freetype-dir=/usr/include/ \
+        --with-jpeg-dir=/usr/include/ \
+        --enable-zip \
+        --with-mcrypt \
     && make  \
     && make install \
     && cp -f php.ini-production $PHP_INI_DIR/php.ini \
